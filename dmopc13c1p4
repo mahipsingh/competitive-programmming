@@ -1,0 +1,86 @@
+//DMOPC13C1P4 (good BFS)
+
+#include <bits/stdc++.h>
+using namespace std;
+#define FOR(i, a, b) for (int i = (a); i <= (b); i++)
+#define FR(i, a, b) for (int i = (a); i < (b); i++)
+#define FORD(i, a, b) for (int i = (a); i >= (b); i--)
+#define FRD(i, a, b) for (int i = (a); i > (b); i--)
+#define szof(x) (int)(x).size()
+#define all(x) begin(x), end(x)
+#define X first
+#define Y second
+#define pb push_back
+#define ub upper_bound
+#define lb lower_bound
+#define eb emplace_back
+#define mp make_pair
+#define ln '\n'
+typedef long long ll;
+typedef unsigned long long ull;
+typedef pair<int, int> ii;
+const int INF = 0x3f3f3f3f;
+const int MOD = 1e9 + 7;
+const int MAXN = 1e5 + 3;
+const double EPS = 1e-9;
+const int dx[4] = {0, 0, 1, -1};
+const int dy[4] = {1, -1, 0, 0};
+bool vis[53][53];
+int dist[53][53];
+void do_case(){
+    int l, w;
+    ii start;
+    cin >> l >> w;
+    vector<string> G;
+    string s;
+    cin.ignore();
+    FR(i, 0, w){
+        getline(cin, s);
+        for(int j=0;j<(int)s.length();j++){
+            if(s[j] == 'C'){
+                start.X = i;
+                start.Y = j;
+            }
+        }
+        G.pb(s);
+    }
+    FOR(i, 0, 52){
+        fill(all(vis[i]), 0);
+        fill(all(dist[i]), 0);
+    }
+    vis[start.X][start.Y] = 1;
+    queue<ii> Q;
+    Q.push(start);
+    dist[start.X][start.Y] = 0;
+    while(!Q.empty()){
+        ii next = Q.front();Q.pop();
+        for(int i = 0; i < 4; i++){
+            ii adj = {dx[i] + next.X, dy[i] + next.Y};
+            if(adj.X >= 0 and adj.X < w and adj.Y >= 0 and adj.Y < l and !vis[adj.X][adj.Y] and G[adj.X][adj.Y] != 'X'){
+                vis[adj.X][adj.Y] = 1;
+                dist[adj.X][adj.Y] = dist[next.X][next.Y] + 1;
+                if(G[adj.X][adj.Y] == 'W'){
+                    if(dist[adj.X][adj.Y] >= 60){
+                        cout << "#notworth" << ln;
+                    }
+                    else{
+                        cout << dist[adj.X][adj.Y] << ln;
+                    }
+                    return;
+                }
+                Q.push(adj);
+            }
+        }
+    }
+    cout << "#notworth" << ln;
+}
+int main(){
+    ios_base::sync_with_stdio(0);cin.tie(0);
+    int t;
+    cin >> t;
+    while(t--){
+        do_case();
+    }
+    return 0;      
+}
+
